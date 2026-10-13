@@ -27,6 +27,7 @@ function deskman_setup_pages() {
 		'contact'              => array( 'title' => 'Contact',             'nav' => true ),
 		'pricing'              => array( 'title' => 'Packages',            'nav' => true ),
 		'insights'             => array( 'title' => 'Insights',            'nav' => true ),
+		'templates'            => array( 'title' => 'Templates',           'nav' => true ),
 		'privacy-policy'       => array( 'title' => 'Privacy Policy',      'nav' => false, 'legal' => 'privacy' ),
 		'terms-and-conditions' => array( 'title' => 'Terms & Conditions',  'nav' => false, 'legal' => 'terms' ),
 	);

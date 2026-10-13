@@ -7,7 +7,7 @@
  *
  * Example:
  *   node tools/screenshot-thumbnail.mjs http://localhost:8080/templates/dental-clinics/preview/ \
- *     wp-content/plugins/deskman-templates/assets/img/thumbs/dental-clinics.webp
+ *     wp-content/plugins/deskman-studio-manager/assets/site-templates/img/thumbs/dental-clinics.webp
  *
  * Requires Playwright (Chromium) and ImageMagick (`convert`) for WebP output.
  */

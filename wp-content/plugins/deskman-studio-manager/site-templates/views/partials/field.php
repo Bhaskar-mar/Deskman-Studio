@@ -8,7 +8,7 @@
  * input for the same key in sync, so the quick-start dialog and the panel
  * edit the same state.
  *
- * @package DeskmanTemplates
+ * @package Deskman_Studio_Manager
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -24,21 +24,21 @@ $dmt_type    = $dmt_field['type'];
 		<span class="dmt-field__label" id="<?php echo esc_attr( $dmt_id . '-label' ); ?>"><?php echo esc_html( $dmt_field['label'] ); ?></span>
 		<div class="dmt-logo" data-dmt-logo-field>
 			<div class="dmt-logo__preview" data-dmt-logo-preview aria-hidden="true">
-				<?php echo DMT_Frontend::icon( 'upload' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php echo deskman_tpl_icon( 'upload' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 			<div class="dmt-logo__controls">
 				<label class="dmt-btn dmt-btn--soft dmt-btn--sm dmt-logo__pick" for="<?php echo esc_attr( $dmt_id ); ?>">
-					<span data-dmt-logo-pick-label><?php esc_html_e( 'Upload logo', 'deskman-templates' ); ?></span>
+					<span data-dmt-logo-pick-label><?php esc_html_e( 'Upload logo', 'deskman-studio-manager' ); ?></span>
 				</label>
 				<input class="dmt-logo__input" id="<?php echo esc_attr( $dmt_id ); ?>" type="file" accept="image/png,image/jpeg,image/webp" data-dmt-logo-input aria-labelledby="<?php echo esc_attr( $dmt_id . '-label' ); ?>" aria-describedby="<?php echo esc_attr( $dmt_desc ); ?>">
-				<button type="button" class="dmt-btn dmt-btn--link dmt-btn--sm" data-dmt-logo-remove hidden><?php esc_html_e( 'Remove', 'deskman-templates' ); ?></button>
+				<button type="button" class="dmt-btn dmt-btn--link dmt-btn--sm" data-dmt-logo-remove hidden><?php esc_html_e( 'Remove', 'deskman-studio-manager' ); ?></button>
 			</div>
 		</div>
 	<?php elseif ( 'color' === $dmt_type ) : ?>
 		<label for="<?php echo esc_attr( $dmt_id ); ?>"><?php echo esc_html( $dmt_field['label'] ); ?></label>
 		<div class="dmt-color">
 			<input id="<?php echo esc_attr( $dmt_id ); ?>" type="color" data-field="<?php echo esc_attr( $dmt_key ); ?>" value="<?php echo esc_attr( strtolower( $dmt_field['default'] ) ); ?>" aria-describedby="<?php echo esc_attr( $dmt_desc ); ?>">
-			<input class="dmt-color__hex" type="text" data-field="<?php echo esc_attr( $dmt_key ); ?>" data-hex value="<?php echo esc_attr( $dmt_field['default'] ); ?>" maxlength="7" spellcheck="false" autocomplete="off" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: field label. */ __( '%s (hex code)', 'deskman-templates' ), $dmt_field['label'] ) ); ?>" aria-describedby="<?php echo esc_attr( $dmt_err_id ); ?>">
+			<input class="dmt-color__hex" type="text" data-field="<?php echo esc_attr( $dmt_key ); ?>" data-hex value="<?php echo esc_attr( $dmt_field['default'] ); ?>" maxlength="7" spellcheck="false" autocomplete="off" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: field label. */ __( '%s (hex code)', 'deskman-studio-manager' ), $dmt_field['label'] ) ); ?>" aria-describedby="<?php echo esc_attr( $dmt_err_id ); ?>">
 		</div>
 	<?php else : ?>
 		<label for="<?php echo esc_attr( $dmt_id ); ?>"><?php echo esc_html( $dmt_field['label'] ); ?></label>

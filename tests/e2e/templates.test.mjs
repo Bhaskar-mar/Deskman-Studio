@@ -1,10 +1,11 @@
 /**
- * End-to-end tests for the Templates page, dental customiser and enquiry flow.
+ * End-to-end tests for the Templates page, dental customiser and enquiry flow
+ * (Deskman Studio Manager → site templates, inside the Deskman Studio theme).
  *
  *   BASE_URL=http://localhost:8080 node --test tests/e2e/
  *
- * Requires a WordPress site with the deskman-templates plugin active (see
- * tests/README.md) and Playwright with Chromium available.
+ * Requires a WordPress site running the Deskman Studio theme and Manager
+ * plugin (see tests/README.md) and Playwright with Chromium available.
  */
 import { test, before, after } from 'node:test';
 import assert from 'node:assert/strict';
@@ -46,7 +47,7 @@ async function open( url, viewport = { width: 1440, height: 900 } ) {
 		}
 	} );
 	page.on( 'response', ( r ) => {
-		if ( r.status() >= 400 && r.url().includes( '/deskman-templates/' ) ) {
+		if ( r.status() >= 400 && r.url().includes( '/site-templates/' ) ) {
 			problems.push( `asset ${ r.status() }: ${ r.url() }` );
 		}
 	} );
@@ -68,7 +69,8 @@ async function noHorizontalOverflow( page ) {
 
 test( 'Templates page loads with all ten industry cards', async () => {
 	const { page, context, problems } = await open( GALLERY );
-	assert.match( await page.locator( 'h1' ).innerText(), /beautiful website/i );
+	assert.match( await page.locator( 'h1' ).innerText(), /Website templates/i );
+	assert.equal( await page.locator( '.nav a[aria-current="page"]' ).innerText(), 'Templates' );
 	const cards = page.locator( '.dmt-cards .dmt-card' );
 	assert.equal( await cards.count(), 10 );
 	for ( const name of [ 'Dental Clinics', 'Hospitals', 'Schools', 'Colleges & Universities', 'Teachers & Tutors', 'Real Estate', 'Solar Energy', 'Salons & Beauty', 'Restaurants & Cafés', 'Professional Services' ] ) {
@@ -264,11 +266,11 @@ test( 'Enquiry form validates input and submits a real enquiry', async () => {
 	await page.locator( '#dmt-e-name' ).fill( 'Dr. E2E Tester' );
 	await page.locator( '#dmt-e-email' ).fill( 'e2e@example.com' );
 	await page.locator( '#dmt-e-phone' ).fill( '+1 555 010 9999' );
-	await page.locator( '#dmt-e-req' ).fill( 'Online booking please.' );
+	await page.locator( '#dmt-e-req' ).fill( `Online booking please (e2e run ${ Date.now() }).` );
 	await page.locator( '#dmt-e-consent' ).check();
 	await page.waitForTimeout( 3200 ); // Minimum fill time enforced by the server.
 	const [ response ] = await Promise.all( [
-		page.waitForResponse( ( r ) => r.url().includes( '/deskman-templates/v1/enquiries' ) ),
+		page.waitForResponse( ( r ) => r.url().includes( '/deskman/v1/template-enquiry' ) ),
 		page.locator( '[data-dmt-submit]' ).click(),
 	] );
 	assert.equal( response.status(), 201 );
@@ -280,18 +282,18 @@ test( 'Enquiry form validates input and submits a real enquiry', async () => {
 	await context.close();
 } );
 
-test( 'REST endpoint rejects invalid and bot submissions', async () => {
+test( 'REST endpoint rejects bot submissions and exposes no enquiries', async () => {
 	const ctx = await browser.newContext();
-	const endpoint = `${ BASE }/wp-json/deskman-templates/v1/enquiries`;
-	// No/forged timing token.
-	let res = await ctx.request.post( endpoint, { multipart: { name: 'Bot', email: 'bot@example.com', phone: '5550100', business: 'Bot Inc', template: 'dental', consent: '1', token: '123.abc' } } );
-	assert.equal( res.status(), 400 );
+	const endpoint = `${ BASE }/wp-json/deskman/v1/template-enquiry`;
 	// Honeypot filled.
-	res = await ctx.request.post( endpoint, { multipart: { website: 'http://spam', token: '1.x' } } );
+	let res = await ctx.request.post( endpoint, { multipart: { website: 'http://spam', name: 'Bot', email: 'bot@example.com' } } );
 	assert.equal( res.status(), 400 );
-	// The REST API exposes no enquiry data.
+	// No nonce from a rendered page.
+	res = await ctx.request.post( endpoint, { multipart: { name: 'Bot', email: 'bot@example.com', phone: '+44 20 7946 0000', business: 'Bot Inc', template: 'dental', consent: '1' } } );
+	assert.equal( res.status(), 403 );
+	// Enquiries are not exposed through the REST API.
 	res = await ctx.request.get( `${ BASE }/wp-json/wp/v2/types` );
-	assert.ok( ! ( await res.text() ).includes( 'dmt_enquiry' ) );
+	assert.ok( ! ( await res.text() ).includes( 'deskman_enquiry' ) );
 	res = await ctx.request.get( endpoint );
 	assert.equal( res.status(), 404 );
 	await ctx.close();

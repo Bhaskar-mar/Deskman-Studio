@@ -2,7 +2,7 @@
 /**
  * Rendering helpers for the dental template.
  *
- * @package DeskmanTemplates
+ * @package Deskman_Studio_Manager
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -18,7 +18,7 @@ if ( ! function_exists( 'dmt_dental_svg' ) ) {
 		static $cache = array();
 		$name = preg_replace( '#[^a-z0-9/_-]#', '', strtolower( $name ) );
 		if ( ! isset( $cache[ $name ] ) ) {
-			$file           = DMT_DIR . 'templates/dental/svg/' . $name . '.svg';
+			$file           = DESKMAN_TPL_DIR . 'dental/svg/' . $name . '.svg';
 			$cache[ $name ] = is_readable( $file ) ? trim( (string) file_get_contents( $file ) ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- bundled asset.
 		}
 		return $cache[ $name ];

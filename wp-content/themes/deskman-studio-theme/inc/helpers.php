@@ -81,6 +81,7 @@ function dm_link( $what ) {
 		case 'packages': return dm_page_url( array( 'packages', 'pricing' ) );
 		case 'about':    return dm_page_url( array( 'about', 'studio' ) );
 		case 'process':  return home_url( '/#process' );
+		case 'templates': return function_exists( 'deskman_tpl_gallery_url' ) ? deskman_tpl_gallery_url() : dm_page_url( 'templates' );
 		case 'insights':
 			$id = (int) get_option( 'page_for_posts' );
 			return $id ? get_permalink( $id ) : dm_page_url( array( 'insights', 'blog' ) );
@@ -97,6 +98,7 @@ function dm_current() {
 	if ( is_page( array( 'packages', 'pricing' ) ) ) { return 'packages'; }
 	if ( is_page( array( 'about', 'studio' ) ) ) { return 'about'; }
 	if ( is_page( 'contact' ) ) { return 'contact'; }
+	if ( is_page( 'templates' ) || ( function_exists( 'deskman_tpl_page_id' ) && deskman_tpl_page_id() && is_page( deskman_tpl_page_id() ) ) ) { return 'templates'; }
 	if ( is_home() || is_singular( 'post' ) || is_category() || is_tag() || is_author() || is_date() ) { return 'insights'; }
 	return '';
 }

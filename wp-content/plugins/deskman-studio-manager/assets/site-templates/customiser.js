@@ -737,7 +737,7 @@
 			showSummary( {} );
 
 			var fd = new FormData();
-			[ 'name', 'business', 'email', 'phone', 'requirements', 'website', 'token' ].forEach( function ( n ) {
+			[ 'name', 'business', 'email', 'phone', 'requirements', 'website', 'token', 'deskman_nonce' ].forEach( function ( n ) {
 				fd.append( n, eForm.elements[ n ].value );
 			} );
 			fd.append( 'consent', eForm.elements.consent.checked ? '1' : '0' );

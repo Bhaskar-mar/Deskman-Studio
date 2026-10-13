@@ -15,6 +15,7 @@ $dm_logo  = get_theme_file_uri( 'assets/img/deskman-symbol.png' );
 $dm_items = array(
 	'services' => array( __( 'Services', 'deskman-studio' ), dm_link( 'services' ) ),
 	'work'     => array( __( 'Work', 'deskman-studio' ), dm_link( 'work' ) ),
+	'templates' => array( __( 'Templates', 'deskman-studio' ), dm_link( 'templates' ) ),
 	'process'  => array( __( 'Process', 'deskman-studio' ), dm_link( 'process' ) ),
 	'packages' => array( __( 'Packages', 'deskman-studio' ), dm_link( 'packages' ) ),
 	'insights' => array( __( 'Insights', 'deskman-studio' ), dm_link( 'insights' ) ),

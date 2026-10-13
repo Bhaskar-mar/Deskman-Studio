@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Deskman Studio Manager
  * Description:       The complete back end for the Deskman Studio theme (v5 design): edit every piece of front-end text, links, colours and project images from one screen, run the on-site chatbot, and generate location landing pages ("best digital marketing agency in Visakhapatnam") that rank without ever appearing in your navigation. The theme reads this content; if this plugin is off, the theme falls back to identical built-in defaults.
- * Version:           7.0.0
+ * Version:           7.1.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Deskman Studio
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'DESKMAN_OPTION', 'deskman_settings' );
 define( 'DESKMAN_GROUP',  'deskman_settings_group' );
-define( 'DESKMAN_VER',    '7.0.0' );
+define( 'DESKMAN_VER',    '7.1.0' );
 define( 'DESKMAN_DIR',    plugin_dir_path( __FILE__ ) );
 define( 'DESKMAN_URL',    plugin_dir_url( __FILE__ ) );
 
@@ -34,6 +34,10 @@ require_once DESKMAN_DIR . 'includes/areas-generator.php';
 /* Per-city page designs. Loaded after areas.php because it uses its CPT
    constant and field helpers, and it re-routes the single template. */
 require_once DESKMAN_DIR . 'includes/area-designs.php';
+
+/* Site templates — the /templates/ gallery, the live customiser and the
+   industry website templates. Enquiries go through leads.php into Forms. */
+require_once DESKMAN_DIR . 'includes/site-templates.php';
 
 /* The chatbot, formerly the standalone "Deskman Chatbot" plugin.
    -------------------------------------------------------------------------
@@ -131,6 +135,8 @@ Search Console
 Analytics' ),
 		'v5_contact_h' => array( 'label'=>'Contact page · headline', 'type'=>'text', 'section'=>'Site · Pages', 'default'=>'Let\'s talk about {your website.}' ),
 		'v5_contact_lead' => array( 'label'=>'Contact page · text', 'type'=>'textarea', 'section'=>'Site · Pages', 'default'=>'Tell us what you\'re planning. You\'ll get a reply within one working day — from the person who will actually work on it.' ),
+		'v5_tpl_h' => array( 'label'=>'Templates page · headline', 'type'=>'text', 'section'=>'Site · Pages', 'default'=>'Website templates, {made for your industry.}', 'help'=>'In headlines, a | starts a new line and {curly braces} mark the coloured accent.' ),
+		'v5_tpl_lead' => array( 'label'=>'Templates page · text', 'type'=>'textarea', 'section'=>'Site · Pages', 'default'=>'Pick a design built for your kind of business, add your name, logo and colours, and preview it live on mobile, tablet, laptop and desktop. When it feels right, we turn it into your finished website.' ),
 		'v5_blog_h' => array( 'label'=>'Insights · headline', 'type'=>'text', 'section'=>'Site · Pages', 'default'=>'Notes on building {better WordPress sites.}' ),
 		'v5_blog_lead' => array( 'label'=>'Insights · text', 'type'=>'textarea', 'section'=>'Site · Pages', 'default'=>'Practical guides on WordPress, SEO, performance and running a website that keeps working for your business.' ),
 		'v5_pk1_name' => array( 'label'=>'Package 1 · name', 'type'=>'text', 'section'=>'Site · Packages', 'default'=>'Landing page', 'help'=>'Package 2 is the highlighted one. No prices are shown anywhere; every button opens the contact form with the package pre-selected.' ),

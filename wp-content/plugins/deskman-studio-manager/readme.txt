@@ -1,12 +1,41 @@
 === Deskman Studio Manager ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 5.1.0
+Stable tag: 7.1.0
 License: GPL-2.0-or-later
 
 The complete back end for the Deskman Studio theme: site content, projects,
 enquiries, the on-site chatbot, and AI-generated location landing pages.
 Everything is edited from one menu: Deskman in the admin sidebar.
+
+
+== What changed in 7.1.0 ==
+
+**Website templates.** A new Templates page (/templates/) shows website
+designs by industry. Visitors pick one, add their own business details, logo
+and brand colours, and see the finished site update live in mobile (390px),
+tablet (768px), laptop (1366px) and desktop (1440px) frames. "Start My
+Project" sends the template and every personalised detail straight into
+**Deskman → Forms**, through the same lead rules as the contact form (email
+and phone checks, spam scoring, quarantine, rate limit, email notification).
+
+Ten industries are listed; Dental Clinics has a complete, working template and
+the rest are marked "Coming soon". Nothing a visitor types is stored until they
+send it, and nothing is ever published.
+
+No action needed: the Templates page is created automatically on the next
+admin page load (or on activation), and the theme (5.1.0+) adds it to the
+navigation and footer.
+
+* Headline and intro: Deskman → Settings → Site · Pages.
+* Industries: `site-templates/industries.php`. Templates:
+  `site-templates/templates.php` and one folder per template.
+* Restyle: copy `site-templates/views/gallery.php` or `customiser.php` into
+  `{theme}/site-templates/views/` and the theme's copy takes over.
+* Uploaded logos are re-encoded and kept out of the Media Library in
+  `wp-content/uploads/deskman-private/templates/`. Apache is blocked by the
+  bundled .htaccess; on Nginx add
+  `location ^~ /wp-content/uploads/deskman-private/ { deny all; }`.
 
 
 == What changed in 5.0.0 ==
@@ -175,6 +204,16 @@ own design tokens, so the bundled template already matches the site.
 
 
 == Changelog ==
+
+= 7.1.0 =
+* New: Templates page with ten industry categories, a live customiser
+  (business details, logo upload, brand colours, content), real responsive
+  device previews and a complete Dental Clinics website template.
+* New: "Start My Project" template enquiries in Deskman → Forms, with the
+  template, personalisation and logo on the enquiry screen. Same validation,
+  spam scoring, quarantine and notifications as the contact form.
+* New: Templates page headline and intro under Settings → Site · Pages; the
+  setup wizard now includes the Templates page.
 
 = 5.0.0 =
 * Merged the Deskman Chatbot plugin into this one. Settings, knowledge base,

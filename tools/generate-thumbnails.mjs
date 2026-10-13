@@ -12,7 +12,7 @@ import { writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const OUT = join( dirname( fileURLToPath( import.meta.url ) ), '../wp-content/plugins/deskman-templates/assets/img/thumbs' );
+const OUT = join( dirname( fileURLToPath( import.meta.url ) ), '../wp-content/plugins/deskman-studio-manager/assets/site-templates/img/thumbs' );
 
 // 24×24 stroke icons.
 const ICONS = {

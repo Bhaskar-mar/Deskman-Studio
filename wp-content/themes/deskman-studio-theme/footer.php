@@ -38,6 +38,7 @@ $dm_sent    = isset( $_GET['deskman_contact'] ) ? sanitize_key( wp_unslash( $_GE
 			</ul></div>
 			<div><h5><?php esc_html_e( 'Studio', 'deskman-studio' ); ?></h5><ul>
 				<li><a href="<?php echo esc_url( dm_link( 'work' ) ); ?>"><?php esc_html_e( 'Work', 'deskman-studio' ); ?></a></li>
+				<li><a href="<?php echo esc_url( dm_link( 'templates' ) ); ?>"><?php esc_html_e( 'Website templates', 'deskman-studio' ); ?></a></li>
 				<li><a href="<?php echo esc_url( dm_link( 'process' ) ); ?>"><?php esc_html_e( 'Process', 'deskman-studio' ); ?></a></li>
 				<li><a href="<?php echo esc_url( dm_link( 'packages' ) ); ?>"><?php esc_html_e( 'Packages', 'deskman-studio' ); ?></a></li>
 				<li><a href="<?php echo esc_url( dm_link( 'about' ) ); ?>"><?php esc_html_e( 'About', 'deskman-studio' ); ?></a></li>

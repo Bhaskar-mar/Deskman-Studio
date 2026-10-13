@@ -19,7 +19,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) { exit; }
 
-define( 'DM_THEME_VER', '5.0.1' );
+define( 'DM_THEME_VER', '5.1.0' );
 
 require_once get_theme_file_path( 'inc/helpers.php' );
 require_once get_theme_file_path( 'inc/icons.php' );
@@ -49,7 +49,7 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_enqueue_style( 'dm-ds', get_theme_file_uri( 'assets/css/ds.css' ), array( 'dm-fonts' ), dm_ver( 'assets/css/ds.css' ) );
 	wp_enqueue_script( 'dm-site', get_theme_file_uri( 'assets/js/site.js' ), array(), dm_ver( 'assets/js/site.js' ), true );
 	/* Block styles are only needed where block content is rendered. */
-	if ( is_front_page() || is_page_template( array( 'page-service.php' ) ) || is_page( array( 'services', 'work', 'pricing', 'packages', 'studio', 'about', 'contact' ) ) ) {
+	if ( is_front_page() || is_page_template( array( 'page-service.php' ) ) || is_page( array( 'services', 'work', 'pricing', 'packages', 'studio', 'about', 'contact', 'templates' ) ) ) {
 		wp_dequeue_style( 'wp-block-library' );
 		wp_dequeue_style( 'global-styles' );
 	}

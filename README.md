@@ -1,116 +1,77 @@
-# Deskman Studio — Templates feature
+# Deskman Studio — website
 
-This repository contains the **Deskman Studio Templates** WordPress plugin
-(`wp-content/plugins/deskman-templates`). It adds:
+This repository holds the deskmanstudio.com WordPress code:
 
-- a **Templates** page at `/templates/` with ten industry categories;
-- a complete, responsive **Dental Clinics** website template;
-- a **live customiser** (business details, logo upload, brand colours, content) with
-  **mobile / tablet / laptop / desktop** previews of the real responsive page;
-- a **Start My Project** enquiry flow that validates, stores and notifies, entirely inside WordPress.
+| Package | Path | Version |
+|---|---|---|
+| **Deskman Studio** theme | `wp-content/themes/deskman-studio-theme` | 5.1.0 |
+| **Deskman Studio Manager** plugin | `wp-content/plugins/deskman-studio-manager` | 7.1.0 |
 
-The plugin is theme-agnostic. It renders inside the active theme's header, footer and
-navigation (classic themes via `get_header()`/`get_footer()`, block themes via
-their `header`/`footer` template parts), so it works with the existing Deskman
-Studio theme without modifying it.
+The theme renders the site; the Manager plugin stores content, projects, leads,
+area pages and the chatbot (see the plugin's `readme.txt`).
 
-## Install
+## 7.1 / 5.1: Website templates
 
-1. Copy `wp-content/plugins/deskman-templates` to the site's `wp-content/plugins/`.
-2. Activate **Deskman Studio Templates** in *Plugins*.
-   - The **Templates** page is created (or an existing page with the slug `templates` is reused).
-   - On classic themes, a *Templates* link is added once to the menu in the
-     `primary`/`main`/`menu-1`/`header` location. Block themes that list pages show it
-     automatically; otherwise add it in *Appearance → Editor → Navigation*.
-3. *Settings → Permalinks*: any "pretty" structure is recommended. Plain permalinks also work, using query strings.
+- **`/templates/`**: a gallery of ten industry categories in the site's own design
+  (dark hero, section heads, three-step strip, the shared "Start a project" CTA).
+  **Dental Clinics** is live; the other nine are "Coming soon". Clicking one
+  explains that its templates are being prepared, and its URL redirects back to
+  the gallery. It never opens a missing template.
+- **`/templates/dental-clinics/`**: the live customiser. It has a quick-start form,
+  then a panel for business details, logo upload (PNG/JPEG/WebP, 2 MB, checked by
+  type, signature and decoding), brand colours, the headline, introduction, services
+  and team. Every change shows immediately in the preview. Reset restores the demo
+  copy.
+- **Device previews**: the template is a real responsive page in an iframe set to
+  exactly 390 / 768 / 1366 / 1440 px, so its own breakpoints apply (mobile menu,
+  stacked layout). The frame is then scaled to fit the screen. On phones, the
+  customiser switches between Customise and Preview tabs.
+- **Start My Project**: sends name, email, phone, business, the template, every
+  personalised field and the logo to `POST /wp-json/deskman/v1/template-enquiry`.
+  It is validated by the **existing lead rules** in `includes/leads.php`: email typo,
+  throwaway-inbox and domain checks, the phone check, spam scoring with quarantine,
+  and the shared rate limit. It is stored in **Deskman → Forms** with a "Website
+  template" panel, and the studio is emailed. The visitor sees a reference number
+  only after the enquiry is actually saved. Nothing is published.
+- **Theme**: "Templates" in the header, mobile menu and footer, plus
+  `dm_link( 'templates' )`.
 
-### Matching the Deskman Studio brand
-
-All colours, radii and fonts for the Templates page and customiser live in
-`assets/css/tokens.css`. They inherit the theme's fonts and, on block themes, its
-`primary`/`secondary` presets. To set exact brand colours, add CSS to the theme
-or to *Customizer → Additional CSS*:
-
-```css
-:root {
-  --dmt-brand: #3355ff;    /* main brand colour (buttons, links) */
-  --dmt-brand-2: #7c5cff;  /* gradient partner */
-  --dmt-font-display: inherit;
-}
-```
-
-### Server configuration (Nginx)
-
-Uploaded logos are stored outside the media library in `wp-content/uploads/dmt-private/`.
-The files get random 32-character names, and Apache is blocked by the bundled `.htaccess`.
-**Nginx ignores `.htaccess`**, so add:
-
-```nginx
-location ^~ /wp-content/uploads/dmt-private/ { deny all; }
-```
-
-Admins view logos through an authenticated, nonce-protected admin endpoint.
-
-## How it works
+### Where things live (plugin)
 
 ```
-deskman-templates/
-├── deskman-templates.php          bootstrap
-├── config/
-│   ├── industries.php             ← industry cards (add new industries here)
-│   └── templates.php              ← registered website templates
-├── includes/
-│   ├── class-dmt-registry.php     reads config (filters: dmt_industries, dmt_templates)
-│   ├── class-dmt-fields.php       field schema, defaults, sanitisation
-│   ├── class-dmt-routes.php       /templates/<industry>/ and /preview/ rewrite rules
-│   ├── class-dmt-frontend.php     page shell, assets, preview document
-│   ├── class-dmt-enquiries.php    private CPT, REST endpoint, logo handling, email
-│   ├── class-dmt-admin.php        enquiry list/detail screens, status, logo viewer
-│   ├── class-dmt-privacy.php      personal-data export/erase, privacy policy text
-│   └── class-dmt-color.php        contrast-safe brand colour helpers
-├── views/                         gallery, customiser, reusable card + field partials
-├── templates/dental/
-│   ├── fields.php                 ← editable fields + demo defaults (drives the form)
-│   ├── preview.php                the dental website markup
-│   └── svg/                       brand-aware illustrations and icons
-└── assets/                        css, js, fonts (self-hosted), thumbnails
+includes/site-templates.php        routes, page, views, REST enquiry, logo storage, admin panel
+site-templates/industries.php      ← the industry cards (add industries here)
+site-templates/templates.php       ← ready templates
+site-templates/dental/fields.php   ← editable fields + demo copy (drives form, preview, validation)
+site-templates/dental/preview.php  the dental website
+site-templates/views/              gallery + customiser (overridable from {theme}/site-templates/views/)
+assets/site-templates/             CSS, JS, self-hosted template font, thumbnails
 ```
 
-- **Template vs. customer data.** A template is code: `preview.php`, CSS and JS, with demo
-  defaults in `fields.php`. A visitor's details live only in their browser
-  (`sessionStorage`, in that tab) and reach the preview iframe through same-origin
-  `postMessage`. The server sees customer data only when they submit **Start My
-  Project**, and then stores it as a private enquiry. Nothing is ever published.
-- **Device previews.** The iframe is set to exactly 390/768/1366/1440 px wide, so the
-  template's own media queries respond as on a real device (mobile navigation, stacked
-  layout and so on). The device frame is then scaled to fit the screen.
-- **Enquiries.** `POST /wp-json/deskman-templates/v1/enquiries` validates every field
-  server-side. It checks the logo by extension, MIME type and real image data, then
-  re-encodes it. It applies a honeypot, a signed minimum-fill-time token and a per-IP rate
-  limit. Valid enquiries are stored as private `dmt_enquiry` posts (administrators only,
-  not exposed in the REST API) and emailed to the site admin email
-  (filter: `dmt_enquiry_recipient`). To connect a CRM or another workflow, hook
-  `dmt_enquiry_submitted` ( `$post_id, $data` ).
+**Adding a template:** copy `site-templates/dental/` to a new folder and adapt
+`fields.php` and `preview.php`. Elements bind with `data-bind`, `data-bind-tel`,
+`data-bind-mailto`, `data-bind-ml` and `data-bind-hours`. Register the template in
+`templates.php`, then point the industry at it in `industries.php`. Thumbnails:
+`node tools/screenshot-thumbnail.mjs <preview-url> <out.webp>` for live templates, and
+`node tools/generate-thumbnails.mjs` for the "coming soon" cards.
 
-### Adding a new industry template
+### Installing the update
 
-1. Copy `templates/dental/` to `templates/<id>/` and adapt `fields.php` and `preview.php`.
-   Elements bind to fields with `data-bind="<field>"`, `data-bind-tel`, `data-bind-mailto`,
-   `data-bind-ml` (multi-line) and `data-bind-hours`.
-2. Register it in `config/templates.php`.
-3. In `config/industries.php`, set the industry's `'template' => '<id>'`.
-4. Create its thumbnail with `node tools/screenshot-thumbnail.mjs <preview-url> <out.webp>`.
+Upload both zips (Appearance → Themes → Add New → Upload for the theme, then
+Plugins → Add New → Upload Plugin for the plugin), choosing **Replace current
+with uploaded**. The Templates page is created on the next admin page load.
 
-Industries whose template is missing stay "Coming soon" automatically. Their URLs
-redirect to the gallery with a short explanation and never open a template.
+**Nginx only:** add
+`location ^~ /wp-content/uploads/deskman-private/ { deny all; }`.
+Uploaded logos have random 32-character names, and Apache is already blocked by
+`.htaccess`.
 
-## Content notes
+### Content notes
 
-- The dental imagery is drawn as SVG illustrations that recolour with the customer's
-  brand. No stock photography was available in the build environment. Swap in licensed
-  clinic photos when producing a real site.
-- Team profiles and testimonials are clearly labelled as example/demonstration content.
-  The template makes no claims about awards, ratings or patient numbers.
+The dental imagery is SVG illustrations that recolour with the customer's brand
+(no photo library was available when it was built). Swap in licensed clinic photos
+for production sites. Team profiles and testimonials are clearly labelled as example
+content.
 
 ## Tests
 
