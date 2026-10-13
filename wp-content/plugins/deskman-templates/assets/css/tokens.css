@@ -1,0 +1,140 @@
+/*
+ * Deskman Studio Templates — design tokens.
+ *
+ * Every colour, radius and font used by the Templates page and customiser is
+ * defined here. Values fall back to the active theme's own presets where the
+ * theme provides them (theme.json / block themes), so the page inherits the
+ * site's typography and palette. To align precisely with the Deskman Studio
+ * brand, override these variables in the theme (or Customizer → Additional
+ * CSS), e.g.  :root { --dmt-brand: #123456; }
+ */
+
+:root {
+	--dmt-font: inherit;
+	--dmt-font-display: inherit;
+
+	--dmt-brand: var(--wp--preset--color--primary, #3355FF);
+	--dmt-brand-2: var(--wp--preset--color--secondary, #7C5CFF);
+	--dmt-brand-ink: color-mix(in srgb, var(--dmt-brand) 82%, #000000);
+	--dmt-on-brand: #FFFFFF;
+	--dmt-brand-50: color-mix(in srgb, var(--dmt-brand) 6%, #FFFFFF);
+	--dmt-brand-100: color-mix(in srgb, var(--dmt-brand) 12%, #FFFFFF);
+
+	--dmt-ink: #0E1726;
+	--dmt-ink-2: #344054;
+	--dmt-muted: #5F6B7A;
+	--dmt-line: #E4E8EF;
+	--dmt-surface: #FFFFFF;
+	--dmt-soft: #F6F7FB;
+	--dmt-dark: #0B1220;
+
+	--dmt-success: #12805C;
+	--dmt-danger: #C0362C;
+	--dmt-warning-bg: #FFF6E0;
+	--dmt-warning-ink: #7A5200;
+
+	--dmt-radius-sm: 10px;
+	--dmt-radius: 16px;
+	--dmt-radius-lg: 24px;
+	--dmt-shadow-sm: 0 1px 2px rgba(14, 23, 38, .06), 0 4px 12px rgba(14, 23, 38, .05);
+	--dmt-shadow: 0 2px 6px rgba(14, 23, 38, .05), 0 20px 44px -16px rgba(14, 23, 38, .18);
+	--dmt-shadow-lg: 0 40px 80px -24px rgba(14, 23, 38, .32);
+	--dmt-ease: cubic-bezier(.2, .7, .2, 1);
+	--dmt-gutter: clamp(16px, 4vw, 40px);
+	--dmt-max: 1240px;
+}
+
+/* Shared primitives for all plugin views. */
+
+/*
+ * Themes often style every <button> with high-specificity selectors. Plugin
+ * controls take their colours from --b-* variables and enforce them here so
+ * they look the same in any theme; states change the variables only.
+ */
+.dmt .dmt-btn,
+.dmt .dmt-devices__btn,
+.dmt .dmt-cz__tabs button,
+.dmt .dmt-notice__close,
+.dmt .dmt-dialog__close,
+.dmt button.dmt-card {
+	background-color: var(--b-bg) !important;
+	color: var(--b-fg) !important;
+	border-color: var(--b-bd) !important;
+	text-decoration: none;
+}
+
+.dmt,
+.dmt *,
+.dmt *::before,
+.dmt *::after { box-sizing: border-box; }
+
+.dmt {
+	font-family: var(--dmt-font);
+	color: var(--dmt-ink-2);
+	line-height: 1.6;
+	-webkit-font-smoothing: antialiased;
+}
+.dmt img,
+.dmt svg { max-width: 100%; }
+.dmt [hidden] { display: none !important; }
+.dmt :focus-visible { outline: 3px solid color-mix(in srgb, var(--dmt-brand) 60%, transparent); outline-offset: 2px; }
+
+.dmt-wrap { width: 100%; max-width: var(--dmt-max); margin-inline: auto; padding-inline: var(--dmt-gutter); }
+
+.dmt-sr {
+	position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+	overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+.dmt-icon { width: 1.2em; height: 1.2em; flex: none; }
+
+.dmt-eyebrow {
+	margin: 0 0 12px; font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+	color: var(--dmt-brand-ink);
+}
+
+.dmt-h2 { margin: 0; font-family: var(--dmt-font-display); font-size: clamp(28px, 3.6vw, 44px); line-height: 1.12; letter-spacing: -.025em; color: var(--dmt-ink); font-weight: 800; }
+.dmt-h3 { margin: 0; font-size: 20px; line-height: 1.3; color: var(--dmt-ink); font-weight: 700; }
+.dmt-h4 { margin: 0; font-size: 17px; line-height: 1.35; color: var(--dmt-ink); font-weight: 700; }
+
+/* Buttons */
+.dmt-btn {
+	--b-bg: var(--dmt-brand);
+	--b-fg: var(--dmt-on-brand);
+	--b-bd: transparent;
+}
+.dmt .dmt-btn,
+.dmt-btn {
+	display: inline-flex; align-items: center; justify-content: center; gap: .5em;
+	min-height: 44px; padding: .65em 1.25em;
+	font: inherit; font-size: 15px; font-weight: 700; line-height: 1.2; letter-spacing: 0; text-transform: none;
+	color: var(--b-fg); background: var(--b-bg); border: 1.5px solid var(--b-bd); border-radius: 999px;
+	text-decoration: none; cursor: pointer; white-space: nowrap;
+	box-shadow: none;
+	transition: transform .2s var(--dmt-ease), box-shadow .2s var(--dmt-ease), background-color .2s, border-color .2s, color .2s;
+}
+.dmt-btn:hover { transform: translateY(-1px); text-decoration: none; color: var(--b-fg); }
+.dmt-btn:active { transform: none; }
+.dmt-btn[disabled],
+.dmt-btn[aria-disabled="true"] { opacity: .6; cursor: not-allowed; transform: none; }
+.dmt-btn--primary { box-shadow: 0 10px 22px -12px color-mix(in srgb, var(--dmt-brand) 80%, transparent); }
+.dmt-btn--primary:hover { --b-bg: var(--dmt-brand-ink); box-shadow: 0 14px 28px -12px color-mix(in srgb, var(--dmt-brand) 80%, transparent); }
+.dmt-btn--ghost { --b-bg: var(--dmt-surface); --b-fg: var(--dmt-ink); --b-bd: var(--dmt-line); }
+.dmt-btn--ghost:hover { --b-bd: color-mix(in srgb, var(--dmt-brand) 45%, var(--dmt-line)); --b-fg: var(--dmt-brand-ink); }
+.dmt-btn--soft { --b-bg: var(--dmt-brand-50); --b-fg: var(--dmt-brand-ink); --b-bd: var(--dmt-brand-100); }
+.dmt-btn--light { --b-bg: #FFFFFF; --b-fg: var(--dmt-ink); }
+.dmt-btn--outline-light { --b-bg: transparent; --b-fg: #FFFFFF; --b-bd: rgba(255, 255, 255, .45); }
+.dmt-btn--outline-light:hover { --b-bg: rgba(255, 255, 255, .1); }
+.dmt-btn--link { --b-bg: transparent; --b-fg: var(--dmt-muted); min-height: 36px; padding-inline: .5em; text-decoration: underline; text-underline-offset: 3px; }
+.dmt-btn--sm { min-height: 38px; padding: .5em 1em; font-size: 14px; }
+.dmt-btn--lg { min-height: 52px; padding: .8em 1.5em; font-size: 16px; }
+.dmt-btn--block { width: 100%; }
+
+.dmt-actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.dmt-actions--center { justify-content: center; }
+
+@media (prefers-reduced-motion: reduce) {
+	.dmt *,
+	.dmt *::before,
+	.dmt *::after { animation: none !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+}

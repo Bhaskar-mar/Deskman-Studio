@@ -1,0 +1,50 @@
+<svg class="dt-illus dt-illus--about" viewBox="0 0 520 580" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="dt-about-illus-t">
+  <title id="dt-about-illus-t">Illustration of a bright clinic room with toothbrushes and a plant</title>
+  <defs>
+    <linearGradient id="dtA-arch" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:var(--c-accent);stop-opacity:.55"/>
+      <stop offset="1" style="stop-color:var(--c-secondary);stop-opacity:.18"/>
+    </linearGradient>
+    <linearGradient id="dtA-glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFFFFF" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#E4F0F8" stop-opacity=".9"/>
+    </linearGradient>
+    <clipPath id="dtA-clip"><path d="M30 580V250C30 129 129 30 250 30h20c121 0 220 99 220 220v330Z"/></clipPath>
+  </defs>
+  <path d="M30 580V250C30 129 129 30 250 30h20c121 0 220 99 220 220v330Z" fill="url(#dtA-arch)"/>
+  <g clip-path="url(#dtA-clip)">
+    <circle cx="372" cy="150" r="58" fill="#FFFFFF" fill-opacity=".7"/>
+    <path d="M30 330h460" stroke="#FFFFFF" stroke-opacity=".6" stroke-width="2"/>
+    <rect x="30" y="430" width="460" height="150" fill="#FFFFFF" fill-opacity=".55"/>
+    <rect x="30" y="424" width="460" height="12" rx="3" fill="#FFFFFF"/>
+    <!-- plant -->
+    <g>
+      <path d="M118 424c-6-34-4-74 8-106" fill="none" style="stroke:var(--c-secondary)" stroke-width="5" stroke-linecap="round"/>
+      <path d="M126 318c-30-6-50-30-52-58 30 2 52 24 52 58Z" style="fill:var(--c-secondary)"/>
+      <path d="M124 360c30-10 54-4 72 16-26 16-56 12-72-16Z" style="fill:var(--c-secondary)" opacity=".75"/>
+      <path d="M120 386c-28-2-50 10-62 32 28 8 52 0 62-32Z" style="fill:var(--c-secondary)" opacity=".55"/>
+      <path d="M96 424h50l-8 52h-34Z" fill="#FFFFFF"/>
+      <path d="M96 424h50l-2 12H98Z" style="fill:var(--c-accent)"/>
+    </g>
+    <!-- toothbrush cup -->
+    <g>
+      <path d="M266 230l40 -12 8 30 -40 12Z" style="fill:var(--c-accent)"/>
+      <rect x="270" y="236" width="12" height="200" rx="6" transform="rotate(-14 276 336)" style="fill:var(--c-primary)"/>
+      <rect x="252" y="214" width="20" height="44" rx="6" transform="rotate(-14 262 236)" fill="#FFFFFF"/>
+      <path d="M256 218v36M262 216v36M268 214v36" transform="rotate(-14 262 236)" style="stroke:var(--c-secondary)" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+      <rect x="316" y="250" width="12" height="190" rx="6" transform="rotate(10 322 345)" style="fill:var(--c-secondary)"/>
+      <rect x="312" y="232" width="20" height="44" rx="6" transform="rotate(10 322 254)" fill="#FFFFFF"/>
+      <path d="M316 236v36M322 236v36M328 236v36" transform="rotate(10 322 254)" style="stroke:var(--c-primary)" stroke-width="2.5" stroke-linecap="round" opacity=".55"/>
+      <path d="M256 326h100l-10 110h-80Z" fill="url(#dtA-glass)" stroke="#FFFFFF" stroke-width="3"/>
+      <path d="M268 340h76" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+    </g>
+    <!-- toothpaste -->
+    <g>
+      <path d="M374 400h86c8 0 14 6 14 14v8c0 8-6 14-14 14h-86l-16-9v-18Z" fill="#FFFFFF"/>
+      <path d="M396 400h30v36h-30Z" style="fill:var(--c-primary)" opacity=".9"/>
+      <rect x="338" y="408" width="22" height="20" rx="4" style="fill:var(--c-secondary)"/>
+    </g>
+  </g>
+  <circle cx="470" cy="80" r="10" style="fill:var(--c-accent)"/>
+  <path d="M60 96l5 13 13 5-13 5-5 13-5-13-13-5 13-5z" style="fill:var(--c-primary)" opacity=".6"/>
+</svg>

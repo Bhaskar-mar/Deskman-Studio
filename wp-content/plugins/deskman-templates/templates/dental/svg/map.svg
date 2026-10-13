@@ -1,0 +1,9 @@
+<svg class="dt-illus dt-illus--map" viewBox="0 0 480 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+  <rect width="480" height="220" fill="#EEF5F8"/>
+  <path d="M-10 160C80 120 140 190 240 150s170-40 250-10" fill="none" stroke="#FFFFFF" stroke-width="18"/>
+  <path d="M120 -10 160 230M330 -10l-40 240M-10 70h500" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+  <path d="M0 0h110v60H0zM176 0h140v62H176zM346 0h140v62H346zM0 84h130v70H0zM178 84h118v56H178zM312 84h170v44H312z" style="fill:var(--c-accent)" fill-opacity=".22"/>
+  <circle cx="240" cy="108" r="34" style="fill:var(--c-primary)" fill-opacity=".14"/>
+  <path d="M240 72c-15 0-27 12-27 27 0 20 27 45 27 45s27-25 27-45c0-15-12-27-27-27Z" style="fill:var(--c-primary)"/>
+  <circle cx="240" cy="99" r="10" fill="#FFFFFF"/>
+</svg>
