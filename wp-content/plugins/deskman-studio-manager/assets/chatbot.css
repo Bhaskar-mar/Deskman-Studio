@@ -1,0 +1,174 @@
+/* ==========================================================================
+   Deskman Chatbot — front-end widget
+   Scoped under #deskman-cb and driven by --dcb-accent (set inline on the root),
+   so nothing leaks into or inherits from the host theme. Works as a tidy panel
+   on desktop and a full-width bottom sheet on mobile.
+   ========================================================================== */
+#deskman-cb{
+  --dcb-accent:#6840FF;
+  --dcb-accent-hi:var(--dcb-accent);
+  --dcb-ink:#191922;
+  --dcb-paper:#ffffff;
+  --dcb-soft:#f6f6f9;
+  --dcb-line:#ececef;
+  --dcb-muted:#7a7a86;
+  --dcb-radius:22px;
+  position:fixed; right:22px; bottom:22px; z-index:2147483000;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px; line-height:1.45;
+}
+#deskman-cb *{ box-sizing:border-box; }
+/* Depth-shaded accent (falls back to the flat accent where unsupported). */
+#deskman-cb{ --dcb-grad:linear-gradient(135deg, var(--dcb-accent), var(--dcb-accent)); }
+@supports (background: color-mix(in srgb, red, blue)){
+  #deskman-cb{
+    --dcb-accent-hi:color-mix(in srgb, var(--dcb-accent) 82%, white);
+    --dcb-grad:linear-gradient(135deg,
+      color-mix(in srgb, var(--dcb-accent) 92%, white),
+      color-mix(in srgb, var(--dcb-accent) 82%, black));
+  }
+}
+
+/* ---- launcher bubble ---- */
+#deskman-cb .dcb-launcher{
+  width:58px; height:58px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--dcb-accent); background:var(--dcb-grad); color:#fff;
+  display:grid; place-items:center; position:relative; margin-left:auto;
+  box-shadow:0 12px 30px -8px rgba(20,10,60,.5), 0 2px 6px rgba(0,0,0,.15);
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease;
+}
+#deskman-cb .dcb-launcher:hover{ transform:translateY(-2px) scale(1.04); }
+#deskman-cb .dcb-launcher:active{ transform:scale(.97); }
+#deskman-cb .dcb-launcher:focus-visible{ outline:3px solid var(--dcb-accent); outline-offset:3px; }
+#deskman-cb .dcb-launcher-ico,
+#deskman-cb .dcb-launcher-close{ grid-area:1/1; display:grid; place-items:center; transition:opacity .16s ease, transform .2s ease; }
+#deskman-cb .dcb-launcher-ico img{ width:32px; height:32px; border-radius:50%; object-fit:cover; display:block; }
+#deskman-cb .dcb-launcher-close{ opacity:0; transform:rotate(-90deg) scale(.5); }
+#deskman-cb[data-open="true"] .dcb-launcher-ico{ opacity:0; transform:rotate(90deg) scale(.5); }
+#deskman-cb[data-open="true"] .dcb-launcher-close{ opacity:1; transform:none; }
+
+/* ---- panel ---- */
+#deskman-cb .dcb-panel{
+  position:absolute; right:0; bottom:74px; width:384px; max-width:calc(100vw - 36px);
+  height:min(600px, calc(100vh - 120px));
+  background:var(--dcb-paper); color:var(--dcb-ink);
+  border:1px solid var(--dcb-line); border-radius:var(--dcb-radius);
+  box-shadow:0 32px 70px -22px rgba(20,10,60,.5), 0 6px 18px rgba(0,0,0,.08);
+  display:flex; flex-direction:column; overflow:hidden;
+  opacity:0; transform:translateY(14px) scale(.98); transform-origin:bottom right;
+  pointer-events:none; transition:opacity .22s ease, transform .22s cubic-bezier(.34,1.4,.64,1);
+}
+#deskman-cb[data-open="true"] .dcb-panel{ opacity:1; transform:none; pointer-events:auto; }
+
+/* ---- header ---- */
+#deskman-cb .dcb-head{
+  display:flex; align-items:center; gap:12px; padding:15px 14px 15px 17px;
+  background:var(--dcb-accent); background:var(--dcb-grad); color:#fff;
+}
+#deskman-cb .dcb-avatar{
+  width:42px; height:42px; border-radius:50%; overflow:hidden; flex:0 0 auto;
+  background:rgba(255,255,255,.22); display:grid; place-items:center;
+  box-shadow:0 0 0 2px rgba(255,255,255,.25);
+}
+#deskman-cb .dcb-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+#deskman-cb .dcb-avatar-txt{ font-weight:700; font-size:19px; }
+#deskman-cb .dcb-head-meta{ display:flex; flex-direction:column; line-height:1.25; margin-right:auto; min-width:0; }
+#deskman-cb .dcb-name{ font-weight:700; font-size:16px; letter-spacing:-.01em; }
+#deskman-cb .dcb-status{ display:flex; align-items:center; gap:6px; font-size:12px; opacity:.92; }
+#deskman-cb .dcb-dot{ width:7px; height:7px; border-radius:50%; background:#3ee08a; box-shadow:0 0 0 3px rgba(62,224,138,.28); }
+#deskman-cb .dcb-x,
+#deskman-cb .dcb-reset{ background:rgba(255,255,255,.12); border:0; color:#fff; cursor:pointer; padding:7px; border-radius:10px; line-height:0; transition:background .15s ease; }
+#deskman-cb .dcb-x:hover,
+#deskman-cb .dcb-reset:hover{ background:rgba(255,255,255,.26); }
+#deskman-cb .dcb-reset{ margin-left:2px; }
+
+/* ---- log ---- */
+#deskman-cb .dcb-log{
+  flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:16px 16px 6px;
+  display:flex; flex-direction:column; gap:9px; background:var(--dcb-soft);
+  scroll-behavior:smooth;
+}
+#deskman-cb .dcb-log::-webkit-scrollbar{ width:8px; }
+#deskman-cb .dcb-log::-webkit-scrollbar-thumb{ background:rgba(0,0,0,.14); border-radius:8px; border:2px solid var(--dcb-soft); }
+#deskman-cb .dcb-msg{
+  max-width:84%; padding:10px 13px; border-radius:16px; white-space:pre-wrap;
+  word-wrap:break-word; font-size:14.5px; line-height:1.5;
+  animation:dcb-pop .24s ease both;
+}
+@keyframes dcb-pop{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:none; } }
+#deskman-cb .dcb-msg.bot{ align-self:flex-start; background:#fff; color:var(--dcb-ink);
+  border:1px solid var(--dcb-line); border-bottom-left-radius:5px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+#deskman-cb .dcb-msg.user{ align-self:flex-end; background:var(--dcb-accent); background:var(--dcb-grad);
+  color:#fff; border-bottom-right-radius:5px; }
+#deskman-cb .dcb-msg a.dcb-inline-cta{
+  display:inline-flex; align-items:center; gap:6px; margin-top:9px; padding:8px 15px;
+  background:var(--dcb-accent); color:#fff; border-radius:999px; text-decoration:none;
+  font-weight:600; font-size:13.5px; box-shadow:0 4px 12px -3px rgba(20,10,60,.5);
+}
+#deskman-cb .dcb-msg.user a.dcb-inline-cta{ background:rgba(255,255,255,.22); }
+#deskman-cb .dcb-msg a.dcb-inline-cta:hover{ filter:brightness(1.05); }
+#deskman-cb .dcb-typing{ align-self:flex-start; display:flex; gap:4px; padding:13px 15px;
+  background:#fff; border:1px solid var(--dcb-line); border-radius:16px; border-bottom-left-radius:5px; }
+#deskman-cb .dcb-typing i{ width:7px; height:7px; border-radius:50%; background:var(--dcb-muted); opacity:.5; animation:dcb-b 1s infinite; }
+#deskman-cb .dcb-typing i:nth-child(2){ animation-delay:.15s; }
+#deskman-cb .dcb-typing i:nth-child(3){ animation-delay:.3s; }
+@keyframes dcb-b{ 0%,60%,100%{ transform:translateY(0); opacity:.4 } 30%{ transform:translateY(-4px); opacity:.9 } }
+
+/* ---- quick chips (start only) ---- */
+#deskman-cb .dcb-quick{ display:flex; flex-wrap:wrap; gap:8px; padding:8px 16px 10px; background:var(--dcb-soft); }
+#deskman-cb .dcb-chip{
+  background:#fff; border:1px solid var(--dcb-line); color:var(--dcb-ink);
+  border-radius:999px; padding:8px 14px; font-size:13.5px; cursor:pointer; line-height:1.2;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+  transition:border-color .15s ease, color .15s ease, transform .12s ease;
+}
+#deskman-cb .dcb-chip:hover{ border-color:var(--dcb-accent); color:var(--dcb-accent); transform:translateY(-1px); }
+
+/* ---- input ---- */
+#deskman-cb .dcb-form{ display:flex; align-items:center; gap:9px; padding:12px; border-top:1px solid var(--dcb-line); background:#fff; padding-bottom:calc(12px + env(safe-area-inset-bottom)); }
+#deskman-cb .dcb-input{
+  flex:1 1 auto; border:1px solid var(--dcb-line); border-radius:999px;
+  padding:11px 16px; font-family:inherit; font-size:16px; /* 16px = no iOS zoom on focus */
+  color:var(--dcb-ink); -webkit-text-fill-color:var(--dcb-ink); /* beat themes that blank input text */
+  caret-color:var(--dcb-accent); background:var(--dcb-soft); min-width:0; -webkit-appearance:none; appearance:none;
+  transition:border-color .15s ease, background .15s ease;
+}
+#deskman-cb .dcb-input::placeholder{ color:var(--dcb-muted); -webkit-text-fill-color:var(--dcb-muted); opacity:1; }
+#deskman-cb .dcb-input:focus{ outline:none; border-color:var(--dcb-accent); background:#fff;
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--dcb-accent) 18%, transparent); }
+#deskman-cb .dcb-send{
+  flex:0 0 auto; width:44px; height:44px; border-radius:50%; border:0; cursor:pointer;
+  background:var(--dcb-accent); background:var(--dcb-grad); color:#fff; display:grid; place-items:center;
+  box-shadow:0 6px 16px -5px rgba(20,10,60,.55); transition:transform .12s ease, filter .15s ease;
+}
+#deskman-cb .dcb-send:hover{ filter:brightness(1.06); }
+#deskman-cb .dcb-send:active{ transform:scale(.94); }
+
+/* ---- mobile: bottom sheet ---- */
+@media (max-width:480px){
+  #deskman-cb{ right:16px; bottom:16px; }
+  #deskman-cb .dcb-panel{
+    position:fixed; left:0; right:0; bottom:0; top:auto; width:100%;
+    max-width:100%; height:86dvh; max-height:86dvh;
+    border-radius:22px 22px 0 0; border-left:0; border-right:0; border-bottom:0;
+    transform-origin:bottom center;
+  }
+  /* The log owns the scrolling; keep it inside the sheet and never let the page
+     behind scroll while you're in the chat. */
+  #deskman-cb .dcb-log{ overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
+  #deskman-cb[data-open="true"] .dcb-launcher{ display:none; }
+  #deskman-cb .dcb-msg{ max-width:88%; }
+  /* Comfortable touch targets on phones. */
+  #deskman-cb .dcb-send{ width:48px; height:48px; }
+  #deskman-cb .dcb-input{ padding:13px 16px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  #deskman-cb .dcb-launcher,
+  #deskman-cb .dcb-panel,
+  #deskman-cb .dcb-launcher-ico,
+  #deskman-cb .dcb-launcher-close,
+  #deskman-cb .dcb-msg{ transition:none; animation:none; }
+  #deskman-cb .dcb-typing i{ animation:none; }
+  #deskman-cb .dcb-log{ scroll-behavior:auto; }
+}
