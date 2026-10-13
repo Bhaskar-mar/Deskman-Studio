@@ -1,3 +1,9 @@
-Plus Jakarta Sans is licensed under the SIL Open Font License, Version 1.1.
-Copyright 2020 The Plus Jakarta Sans Project Authors (https://github.com/tokotype/PlusJakartaSans)
-Full licence text: https://openfontlicense.org/open-font-license-official-text/
+All fonts in this folder are licensed under the SIL Open Font License 1.1
+(https://openfontlicense.org/open-font-license-official-text/):
+
+- Plus Jakarta Sans — Copyright 2020 The Plus Jakarta Sans Project Authors
+- Inter — Copyright 2020 The Inter Project Authors
+- Instrument Serif — Copyright 2022 The Instrument Serif Project Authors
+- Bricolage Grotesque — Copyright 2022 The Bricolage Grotesque Project Authors
+
+Latin subsets, self-hosted so template previews make no third-party requests.

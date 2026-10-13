@@ -34,6 +34,15 @@ $dmt_type    = $dmt_field['type'];
 				<button type="button" class="dmt-btn dmt-btn--link dmt-btn--sm" data-dmt-logo-remove hidden><?php esc_html_e( 'Remove', 'deskman-studio-manager' ); ?></button>
 			</div>
 		</div>
+	<?php elseif ( 'select' === $dmt_type ) : ?>
+		<label for="<?php echo esc_attr( $dmt_id ); ?>"><?php echo esc_html( $dmt_field['label'] ); ?></label>
+		<div class="dmt-select">
+			<select id="<?php echo esc_attr( $dmt_id ); ?>" data-field="<?php echo esc_attr( $dmt_key ); ?>" aria-describedby="<?php echo esc_attr( $dmt_desc ); ?>">
+				<?php foreach ( (array) $dmt_field['options'] as $dmt_val => $dmt_label ) : ?>
+					<option value="<?php echo esc_attr( $dmt_val ); ?>" <?php selected( $dmt_field['default'], $dmt_val ); ?>><?php echo esc_html( $dmt_label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
 	<?php elseif ( 'color' === $dmt_type ) : ?>
 		<label for="<?php echo esc_attr( $dmt_id ); ?>"><?php echo esc_html( $dmt_field['label'] ); ?></label>
 		<div class="dmt-color">

@@ -109,3 +109,37 @@ if ( ! function_exists( 'dmt_dental_portrait' ) ) {
 			. '</svg>';
 	}
 }
+
+if ( ! function_exists( 'dmt_dental_rich' ) ) {
+	/**
+	 * Headline text with {curly-brace} words wrapped as accents.
+	 *
+	 * @param string $text Headline.
+	 * @return string Escaped HTML.
+	 */
+	function dmt_dental_rich( $text ) {
+		$out = '';
+		foreach ( preg_split( '/(\{[^{}]*\})/', (string) $text, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY ) as $part ) {
+			$out .= ( '{' === $part[0] && '}' === substr( $part, -1 ) )
+				? '<em class="dt-accent">' . esc_html( substr( $part, 1, -1 ) ) . '</em>'
+				: esc_html( $part );
+		}
+		return $out;
+	}
+}
+
+if ( ! function_exists( 'dmt_dental_lines' ) ) {
+	/**
+	 * One list item per non-empty line.
+	 *
+	 * @param string $text Lines.
+	 * @return string Escaped HTML.
+	 */
+	function dmt_dental_lines( $text ) {
+		$out = '';
+		foreach ( preg_split( '/\r\n|\r|\n/', (string) $text ) as $line ) {
+			if ( '' !== trim( $line ) ) { $out .= '<li>' . esc_html( trim( $line ) ) . '</li>'; }
+		}
+		return $out;
+	}
+}

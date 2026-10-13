@@ -96,7 +96,7 @@ check( 'theme links the nav to the gallery', function_exists( 'dm_link' ) && dm_
 section( 'Field schema & sanitisation' );
 
 $d = deskman_tpl_defaults( 'dental' );
-foreach ( array( 'clinic_name', 'dentist_name', 'description', 'phone', 'email', 'address', 'hours', 'cta_text', 'color_primary', 'color_secondary', 'color_accent', 'hero_heading', 'hero_text', 'about_text', 'service_1_name', 'service_6_desc' ) as $k ) {
+foreach ( array( 'clinic_name', 'dentist_name', 'description', 'phone', 'whatsapp', 'email', 'address', 'hours', 'cta_text', 'color_primary', 'color_secondary', 'color_accent', 'font_style', 'corners', 'tone', 'hero_heading', 'hero_text', 'about_text', 'announcement', 'emergency', 'payments', 'service_1_name', 'service_6_desc', 'stat_1_value', 'faq_4_a' ) as $k ) {
 	check( "schema has {$k}", array_key_exists( $k, $d ) );
 }
 $c = deskman_tpl_clean_customisation( 'dental', array(
@@ -110,6 +110,9 @@ $c = deskman_tpl_clean_customisation( 'dental', array(
 	'hero_heading'  => str_repeat( 'x', 500 ),
 	'unknown_key'   => 'ignored',
 	'hours'         => "Mon: 9-5\nTue: 9-5",
+	'font_style'    => 'comic-sans',
+	'tone'          => 'warm',
+	'announcement'  => '',
 ) );
 check( 'HTML stripped from text', 'Smile Co' === $c['clinic_name'], $c['clinic_name'] );
 check( 'invalid colour falls back to demo', $d['color_primary'] === $c['color_primary'] );
@@ -121,6 +124,9 @@ check( 'phone stripped to allowed characters', '+1 555 0100' === $c['phone'], $c
 check( 'length limited to schema max', 90 === mb_strlen( $c['hero_heading'] ) );
 check( 'unknown keys discarded', ! isset( $c['unknown_key'] ) );
 check( 'multi-line text kept', "Mon: 9-5\nTue: 9-5" === $c['hours'] );
+check( 'unknown style option falls back to default', 'modern' === $c['font_style'] );
+check( 'known style option kept', 'warm' === $c['tone'] );
+check( 'optional field may be emptied', '' === $c['announcement'] );
 check( 'white text on dark brand colour', '#FFFFFF' === deskman_tpl_on( '#1E6FD9' ) );
 check( 'dark text on light brand colour', '#0B1B2B' === deskman_tpl_on( '#8FE3C8' ) );
 check( 'ink colour readable on white', deskman_tpl_luminance( deskman_tpl_ink( '#FFE066' ) ) <= 0.18 );

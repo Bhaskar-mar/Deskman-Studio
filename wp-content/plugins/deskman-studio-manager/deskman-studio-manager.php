@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       Deskman Studio Manager
  * Description:       The complete back end for the Deskman Studio theme (v5 design): edit every piece of front-end text, links, colours and project images from one screen, run the on-site chatbot, and generate location landing pages ("best digital marketing agency in Visakhapatnam") that rank without ever appearing in your navigation. The theme reads this content; if this plugin is off, the theme falls back to identical built-in defaults.
- * Version:           7.1.0
+ * Version:           7.2.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            Deskman Studio
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; }
 
 define( 'DESKMAN_OPTION', 'deskman_settings' );
 define( 'DESKMAN_GROUP',  'deskman_settings_group' );
-define( 'DESKMAN_VER',    '7.1.0' );
+define( 'DESKMAN_VER',    '7.2.0' );
 define( 'DESKMAN_DIR',    plugin_dir_path( __FILE__ ) );
 define( 'DESKMAN_URL',    plugin_dir_url( __FILE__ ) );
 

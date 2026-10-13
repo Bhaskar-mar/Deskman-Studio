@@ -1,7 +1,7 @@
 === Deskman Studio Manager ===
 Requires at least: 6.0
 Requires PHP: 7.4
-Stable tag: 7.1.0
+Stable tag: 7.2.0
 License: GPL-2.0-or-later
 
 The complete back end for the Deskman Studio theme: site content, projects,
@@ -204,6 +204,20 @@ own design tokens, so the bundled template already matches the site.
 
 
 == Changelog ==
+
+= 7.2.0 =
+* Dental Clinics template v2: redesigned throughout — editorial hero with
+  highlighted words ({curly braces} in the headline), highlights band,
+  urgent-care strip, "your first visit" steps, payment options, FAQ
+  accordion, a booking-request form preview, WhatsApp button and a sticky
+  Call / Book bar on phones.
+* New "Look & feel" choices in the customiser: four typography styles
+  (Modern, Editorial, Friendly, Minimal), three corner styles and three
+  background tones, applied live. Fonts are self-hosted (OFL).
+* Optional sections (announcement, urgent care, payments, WhatsApp,
+  social links) hide themselves when left empty.
+* Templates now share one script (template-runtime.js) and the field schema
+  supports select fields.
 
 = 7.1.0 =
 * New: Templates page with ten industry categories, a live customiser

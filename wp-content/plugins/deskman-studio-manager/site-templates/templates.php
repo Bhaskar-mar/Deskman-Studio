@@ -23,7 +23,7 @@ return array(
 		'description' => __( 'A calm, premium website for dental practices with services, team profiles, opening hours and a prominent appointment call to action.', 'deskman-studio-manager' ),
 		'dir'         => DESKMAN_TPL_DIR . 'dental/',
 		'styles'      => array( 'template-dental.css' ),
-		'scripts'     => array( 'template-dental.js' ),
+		'scripts'     => array( 'template-runtime.js' ),
 		'preload'     => array( 'fonts/plus-jakarta-sans-latin.woff2' ),
 	),
 );

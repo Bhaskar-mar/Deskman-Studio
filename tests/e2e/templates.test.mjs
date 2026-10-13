@@ -115,12 +115,13 @@ test( 'Dental Clinics card opens the customiser with a live preview', async () =
 	await page.waitForURL( DENTAL );
 	await skipQuickStart( page );
 	const frame = page.frameLocator( '[data-dmt-iframe]' );
-	await frame.locator( '.dt-hero__title' ).waitFor();
-	assert.match( await frame.locator( '.dt-hero__title' ).innerText(), /healthier, happier smiles/ );
-	for ( const id of [ 'services', 'about', 'team', 'appointment', 'contact' ] ) {
+	await frame.locator( '.dt-display' ).waitFor();
+	assert.match( await frame.locator( '.dt-display' ).innerText(), /healthier, happier smiles/ );
+	assert.equal( await frame.locator( '.dt-display .dt-accent' ).innerText(), 'healthier, happier' );
+	for ( const id of [ 'treatments', 'about', 'team', 'faq', 'book', 'contact' ] ) {
 		assert.equal( await frame.locator( `#${ id }` ).count(), 1, `#${ id } section` );
 	}
-	assert.match( await frame.locator( '.dt-testimonials' ).innerText(), /not real reviews/ );
+	assert.match( await frame.locator( '.dt-stories' ).innerText(), /not real reviews/ );
 	assert.deepEqual( problems, [] );
 	await context.close();
 } );
@@ -166,6 +167,53 @@ test( 'Clinic name, phone, colours and logo update the preview immediately', asy
 	await context.close();
 } );
 
+test( 'Look & feel options, notices and content sections update live', async () => {
+	const { page, context } = await open( DENTAL );
+	await skipQuickStart( page );
+	const frame = page.frameLocator( '[data-dmt-iframe]' );
+	const html = frame.locator( 'html' );
+	// Open every panel group, as a person would before editing them.
+	await page.locator( '.dmt-group' ).evaluateAll( ( groups ) => groups.forEach( ( g ) => { g.open = true; } ) );
+
+	await page.selectOption( '#dmt-panel-font_style', 'editorial' );
+	await page.selectOption( '#dmt-panel-corners', 'sharp' );
+	await page.selectOption( '#dmt-panel-tone', 'warm' );
+	await page.waitForTimeout( 300 );
+	assert.deepEqual( await html.evaluate( ( h ) => [ h.dataset.fontStyle, h.dataset.corners, h.dataset.tone ] ), [ 'editorial', 'sharp', 'warm' ] );
+	assert.match( await frame.locator( '.dt-display' ).evaluate( ( el ) => getComputedStyle( el ).fontFamily ), /Instrument Serif/ );
+
+	// {braces} highlight words in the headline — as text, never HTML.
+	await page.locator( '#dmt-panel-hero_heading' ).fill( 'Smiles that feel {like you} <b>' );
+	await assert.doesNotReject( frame.locator( '.dt-display .dt-accent', { hasText: 'like you' } ).waitFor() );
+	assert.equal( await frame.locator( '.dt-display b' ).count(), 0 );
+	assert.match( await frame.locator( '.dt-display' ).innerText(), /<b>/ );
+
+	// Optional sections hide when emptied and come back when filled.
+	await page.locator( '#dmt-panel-announcement' ).fill( '' );
+	await page.locator( '#dmt-panel-emergency' ).fill( '' );
+	await page.waitForTimeout( 200 );
+	assert.ok( await frame.locator( '.dt-announce' ).isHidden() );
+	assert.ok( await frame.locator( '.dt-urgent' ).isHidden() );
+	assert.ok( await frame.locator( '.dt-wa' ).isHidden(), 'WhatsApp hidden until a number is set' );
+	await page.locator( '#dmt-panel-whatsapp' ).fill( '+44 7700 900123' );
+	await assert.doesNotReject( frame.locator( '.dt-wa' ).waitFor() );
+	assert.equal( await frame.locator( '.dt-wa' ).getAttribute( 'href' ), 'https://wa.me/447700900123' );
+
+	// Lists, FAQs and highlights.
+	await page.locator( '#dmt-panel-payments' ).fill( 'Card\nInsurance' );
+	await page.locator( '#dmt-panel-faq_2_q' ).fill( 'Do you see children?' );
+	await page.locator( '#dmt-panel-stat_1_value' ).fill( '7 days' );
+	await page.waitForTimeout( 200 );
+	assert.deepEqual( await frame.locator( '.dt-payments__list li' ).allInnerTexts(), [ 'Card', 'Insurance' ] );
+	assert.ok( await frame.locator( '.dt-faq summary', { hasText: 'Do you see children?' } ).count() );
+	assert.ok( await frame.locator( '.dt-stat dd', { hasText: '7 days' } ).count() );
+
+	// The booking form in the preview is a demo and never submits anywhere.
+	await frame.locator( '.dt-form button[type=submit]' ).click();
+	await assert.doesNotReject( frame.locator( '[data-toast]' ).waitFor() );
+	await context.close();
+} );
+
 test( 'Invalid logo files are rejected with a helpful message', async () => {
 	const { page, context } = await open( DENTAL );
 	await skipQuickStart( page );
@@ -191,7 +239,7 @@ test( 'Device previews render the real responsive layout at each width', async (
 		const inner = await frame.locator( 'html' ).evaluate( () => window.innerWidth );
 		assert.equal( inner, width, `${ device } viewport width` );
 		const menuVisible = await frame.locator( '[data-menu-toggle]' ).isVisible();
-		assert.equal( menuVisible, width < 960, `${ device } hamburger menu` );
+		assert.equal( menuVisible, width < 1024, `${ device } hamburger menu` );
 		const overflow = await frame.locator( 'html' ).evaluate( () => document.documentElement.scrollWidth - window.innerWidth );
 		assert.ok( overflow <= 0, `${ device } has no horizontal overflow` );
 		// The scaled device frame fits inside the stage.
@@ -208,6 +256,7 @@ test( 'Device previews render the real responsive layout at each width', async (
 	await frame.locator( '[data-menu-toggle]' ).click();
 	assert.equal( await frame.locator( '[data-menu-toggle]' ).getAttribute( 'aria-expanded' ), 'true' );
 	await frame.locator( '.dt-nav__link', { hasText: 'Our Team' } ).click();
+	assert.ok( await frame.locator( '.dt-mbar' ).isVisible(), 'mobile call/book bar' );
 	assert.equal( await frame.locator( '[data-menu-toggle]' ).getAttribute( 'aria-expanded' ), 'false' );
 	await context.close();
 } );

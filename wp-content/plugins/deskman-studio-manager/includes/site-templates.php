@@ -127,10 +127,10 @@ function deskman_tpl_groups( $template_id ) {
 	$t      = deskman_tpl_template( $template_id );
 	$groups = ( $t && is_readable( $t['dir'] . 'fields.php' ) ) ? require $t['dir'] . 'fields.php' : array();
 	$groups = (array) apply_filters( 'deskman_site_template_fields', $groups, $template_id );
-	$types  = array( 'text', 'textarea', 'tel', 'email', 'url', 'color', 'logo' );
+	$types  = array( 'text', 'textarea', 'tel', 'email', 'url', 'color', 'logo', 'select' );
 	foreach ( $groups as $gid => $g ) {
 		foreach ( (array) $g['fields'] as $key => $f ) {
-			$f = wp_parse_args( $f, array( 'type' => 'text', 'label' => $key, 'default' => '', 'max' => 200, 'help' => '', 'quick' => false, 'required' => false, 'rows' => 3 ) );
+			$f = wp_parse_args( $f, array( 'type' => 'text', 'label' => $key, 'default' => '', 'max' => 200, 'help' => '', 'quick' => false, 'required' => false, 'rows' => 3, 'options' => array() ) );
 			if ( ! in_array( $f['type'], $types, true ) ) { $f['type'] = 'text'; }
 			$groups[ $gid ]['fields'][ $key ] = $f;
 		}
@@ -161,6 +161,7 @@ function deskman_tpl_clean_value( array $f, $value ) {
 		case 'url':      $value = esc_url_raw( trim( $value ), array( 'http', 'https' ) ); break;
 		case 'color':    $value = sanitize_hex_color( trim( $value ) ); $value = $value ? strtoupper( $value ) : ''; break;
 		case 'logo':     return ''; // logos arrive as files, never as values
+		case 'select':   return array_key_exists( $value, (array) $f['options'] ) ? $value : '';
 		default:         $value = sanitize_text_field( $value );
 	}
 	$max = max( 1, (int) $f['max'] );
@@ -189,12 +190,13 @@ function deskman_tpl_fields_js( $template_id ) {
 	$out = array();
 	foreach ( deskman_tpl_fields( $template_id ) as $key => $f ) {
 		$out[ $key ] = array( 'type' => $f['type'], 'label' => $f['label'], 'default' => $f['default'], 'max' => (int) $f['max'], 'required' => (bool) $f['required'] );
+		if ( 'select' === $f['type'] ) { $out[ $key ]['options'] = array_keys( (array) $f['options'] ); }
 	}
 	return $out;
 }
 
 /* ==========================================================================
-   Brand colours — mirrored in template-dental.js so server defaults and live
+   Brand colours — mirrored in template-runtime.js so server defaults and live
    updates come out identical
    ========================================================================== */
 
@@ -884,7 +886,7 @@ function deskman_tpl_meta_box( $post ) {
 		$swatch = 'color' === $fields[ $k ]['type'] ? '<span style="display:inline-block;width:14px;height:14px;border-radius:4px;vertical-align:-2px;margin-right:6px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15);background:' . esc_attr( $v ) . '"></span>' : '';
 		echo '<tr><th style="width:220px">' . esc_html( $fields[ $k ]['label'] )
 			. ( $demo ? ' <span style="color:#8c8f94;font-weight:400">' . esc_html__( '(demo)', 'deskman-studio-manager' ) . '</span>' : '' )
-			. '</th><td>' . $swatch . nl2br( esc_html( $v ) ) . '</td></tr>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			. '</th><td>' . $swatch . nl2br( esc_html( 'select' === $fields[ $k ]['type'] && isset( $fields[ $k ]['options'][ $v ] ) ? $fields[ $k ]['options'][ $v ] : $v ) ) . '</td></tr>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 	echo '</tbody></table>';
 	if ( $template ) {
